@@ -18,6 +18,7 @@
 -   [Repository structure](#repository-structure)
 -   [Dataset](#dataset)
 -   [Requirements](#requirements)
+-   [Step-by-step: how to run the code](#step-by-step-how-to-run-the-code)
 -   [Run locally on Windows](#run-locally-on-windows)
 -   [Run in Google Colab](#run-in-google-colab)
 -   [Command-line usage](#command-line-usage)
@@ -168,6 +169,8 @@ Evaluation against labelled masks (when available)
 -   **Pandas:** inspecting and exporting evaluation tables.
 -   **Google Colab (optional):** hosted Python environment that avoids
     local package setup.
+-   **Streamlit (`app.py`):** interactive browser interface for manual
+    inspection and quick visual testing.
 
 The detector does not require a GPU.
 
@@ -178,21 +181,32 @@ and store outputs. A typical layout is:
 
 ``` text
 CMFD-project/
+├── app.py
 ├── detect.py
 ├── evaluate_dataset.py
 ├── requirements.txt
 ├── README.md
 ├── report_outline.md
-├── comofod_data/                
-└── outputs/                     
+├── DATASET.md
+├── comofod_data/
+│   └── ... extracted CoMoFoD files
+└── outputs/
     ├── demo_001/
     │   ├── overlay.png
     │   ├── predicted_mask.png
-    │   ├── inlier_matches.jpg    
+    │   ├── inlier_matches.jpg
     │   └── result.json
     ├── per_image_results.csv
     └── summary.json
 ```
+
+-   `detect.py`: runs the core SIFT + RANSAC detection pipeline on a
+    single image.
+-   `app.py`: interactive Streamlit frontend for uploading or pasting an
+    image and inspecting the suspicious region visually.
+-   `evaluate_dataset.py`: batch evaluator for running multiple images and
+    summarising dataset-level results.
+-   `outputs/`: generated result images and evaluation files.
 
 
 
@@ -232,8 +246,160 @@ confirm them after extraction.
     version compatible with the installed requirements.
 -   `pip`
 -   The packages listed in `requirements.txt`
--   The project source files (`detect.py` and `evaluate_dataset.py`)
+-   The project source files (`detect.py`, `evaluate_dataset.py`, and
+    `app.py`)
 -   Dataset files, downloaded separately
+
+## Step-by-step: how to run the code
+
+There are two main ways to use the project:
+
+1. Command-line mode for a single image or dataset evaluation.
+2. GUI mode using `app.py` for interactive testing.
+
+### 1. Clone or open the project folder
+
+Open a terminal in the project root directory.
+
+``` powershell
+cd "path\to\CMFD-project"
+```
+
+Make sure the following files are present:
+
+-   `detect.py`
+-   `evaluate_dataset.py`
+-   `app.py`
+-   `requirements.txt`
+
+### 2. Create a Python virtual environment
+
+``` powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks script execution, use the virtual environment Python
+ directly or activate from a shell that allows it.
+
+### 3. Install dependencies
+
+``` powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+If needed, install the core packages manually:
+
+``` powershell
+python -m pip install opencv-python numpy matplotlib pandas streamlit
+```
+
+### 4. Check that the detector works
+
+Verify OpenCV and SIFT are available:
+
+``` powershell
+python -c "import cv2; print('OpenCV:', cv2.__version__); print('SIFT available:', hasattr(cv2, 'SIFT_create'))"
+```
+
+This should print `True` for SIFT support.
+
+### 5. Run the detector on a single image from the command line
+
+From the project root:
+
+``` powershell
+python detect.py "comofod_data/001_F.png" --output "outputs/demo_001"
+```
+
+If you also have a ground-truth mask and want pixel-level comparison:
+
+``` powershell
+python detect.py "comofod_data/001_F.png" --mask "comofod_data/001_B.png" --output "outputs/demo_001"
+```
+
+This command:
+
+- loads the input image
+- runs the SIFT + RANSAC copy-move detection pipeline
+- saves:
+  - `predicted_mask.png`
+  - `overlay.png`
+  - `inlier_matches.jpg` (when matches are available)
+  - `result.json`
+
+### 6. Run the dataset evaluator
+
+If your CoMoFoD dataset is inside `comofod_data`, evaluate several images:
+
+``` powershell
+python evaluate_dataset.py "comofod_data" --output "outputs/evaluation"
+```
+
+You can also preview supported options:
+
+``` powershell
+python evaluate_dataset.py --help
+```
+
+This script scans the dataset, evaluates images, and writes:
+
+-   `per_image_results.csv`
+-   `summary.json`
+
+### 7. Run the interactive Streamlit app (`app.py`)
+
+The app is the easiest way to test the detector visually without writing
+command-line arguments each time.
+
+``` powershell
+streamlit run app.py
+```
+
+Then in the browser:
+
+1.  Upload an image or paste one from the clipboard.
+2.  Adjust the detector parameters in the left sidebar.
+3.  Click **Detect forgery**.
+4.  Inspect:
+    - input image
+    - suspicious region overlay
+    - predicted mask
+    - matched feature view
+    - optional score against a ground-truth mask
+
+#### Role of `app.py`
+
+`app.py` is the interactive frontend for the project. It does not contain
+the main detection algorithm itself; it calls functions from `detect.py`
+such as:
+
+-   `detect_copy_move(...)`
+-   `make_overlay(...)`
+-   `compute_metrics(...)`
+
+This makes it useful for:
+
+- quick manual testing
+- parameter tuning by eye
+- comparing outputs on a single sample image
+- showing the result in a user-friendly interface
+
+### 8. Typical workflow
+
+For most users, the recommended sequence is:
+
+``` powershell
+python detect.py "comofod_data/001_F.png" --mask "comofod_data/001_B.png" --output "outputs/demo_001"
+streamlit run app.py
+```
+
+Use:
+
+-   `detect.py` for reproducible single-image runs
+-   `evaluate_dataset.py` for multiple-image evaluation
+-   `app.py` for interactive visual inspection and quick experimentation
 
 ## Run locally on Windows
 
@@ -330,6 +496,15 @@ python detect.py "comofod_data/001_F.png" `
 There must be no trailing spaces after a PowerShell continuation
 backtick. The one-line command is simpler and less error-prone.
 
+If you want to use the browser-based UI instead of the terminal, run:
+
+``` powershell
+streamlit run app.py
+```
+
+Then upload an image from the browser to test the same detection pipeline
+interactively.
+
 ### 7. Inspect the output
 
 Open the files generated under `outputs/demo_001`. Typical outputs
@@ -357,9 +532,9 @@ you are using the supplied Colab workflow.
 4.  Upload `cmfd_course_project.zip` when prompted by the notebook.
 5.  Install dependencies in the notebook.
 6.  Download CoMoFoD from its official page if the notebook's direct
-    download fails; use the notebook's manual upload cell.
+download fails; use the notebook's manual upload cell.
 7.  Inspect the original/forged/mask examples, run single-image
-    detection, and then run the dataset evaluator.
+detection, and then run the dataset evaluator.
 8.  Run parameter experiments on development IDs and use a separate
     held-out subset for the final evaluation.
 9.  Save generated outputs to Google Drive before ending the session.
@@ -383,6 +558,15 @@ If a matching ground-truth mask is available and the script supports the
 ``` powershell
 python detect.py "PATH_TO_FORGED_IMAGE" --mask "PATH_TO_GROUND_TRUTH_MASK" --output "outputs/experiment_name"
 ```
+
+The project can be used in two modes:
+
+-   Command-line mode: `python detect.py ...`
+-   Interactive app mode: `streamlit run app.py`
+
+`app.py` is the GUI wrapper around the detector and is intended for
+manual testing and visual inspection. The actual algorithmic logic remains
+in `detect.py`.
 
 The starter implementation exposes parameter flags for experiments.
 Confirm the supported options for your checked-out version with:
@@ -620,4 +804,3 @@ positive if available. Explain what the results do and do not establish.
 5.  CoMoFoD [release
     agreement](https://www.vcl.fer.hr/comofod/release_agreemen.html).
     Review and follow the conditions of use.
-
