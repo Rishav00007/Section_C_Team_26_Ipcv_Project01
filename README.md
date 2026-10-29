@@ -26,7 +26,6 @@
 -   [Output files](#output-files)
 -   [How to improve and compare
     results](#how-to-improve-and-compare-results)
--   [Results](#results)
 -   [Limitations](#limitations)
 -   [Reproducibility checklist](#reproducibility-checklist)
 -   [References and dataset
@@ -698,23 +697,6 @@ Recommended questions to investigate:
 
 A parameter change is not automatically an improvement. Report the
 observed trade-offs, including negative or inconclusive results.
-
-## Results
-
-**Complete this section after running the code. Do not leave example
-values as if they were measured results.**
-
--   Dataset category and source: \[TODO\]
--   Number of image IDs evaluated: \[TODO\]
--   Number of individual images evaluated: \[TODO\]
--   Image-level precision / recall / F1: \[TODO\]
--   Pixel-level precision / recall / F1 / IoU: \[TODO, if available\]
--   Best qualitative example: \[TODO: image ID and reason\]
--   Failure case: \[TODO: image ID and reason\]
-
-Include at least one real forged-image example with its ground-truth
-mask, predicted mask, and overlay. Include a failure case or false
-positive if available. Explain what the results do and do not establish.
 
 ## Limitations
 
