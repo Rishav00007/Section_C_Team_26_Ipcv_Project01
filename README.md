@@ -51,6 +51,7 @@
   \[Rishabh Jain\] \[20233232\]            \[Evaluation, experiments, and visualizations\]
 
   \[Nakul Tiwari\]  \[20233194\]            \[Testing, report, and presentation\]
+  
   -----------------------------------------------------------------------
 
 
@@ -613,6 +614,7 @@ Parameters used by the supplied workflow include:
                           morphological dilation  more of the copied area
                           used to expand the      but may overestimate
                           predicted mask          its boundaries.
+                          
   -----------------------------------------------------------------------
 
 The exact parameter defaults should be read from your version of
@@ -671,6 +673,7 @@ Depending on the command and version, the project may generate:
   `summary.json`                       Aggregate evaluation results.
 
   `report_figure_*.png`                Figures generated for the report.
+  
   ------------------------------------------------------------------------
 
 Use actual outputs from your own run. Do not invent scores, imply that a
