@@ -1,0 +1,35 @@
+{
+  "image": "comofod_data\\004_F.png",
+  "is_suspected_forgery": true,
+  "reason": "Geometrically consistent distant feature matches",
+  "keypoint_count": 1123,
+  "candidate_match_count": 227,
+  "inlier_count": 76,
+  "parameters": {
+    "nfeatures": 2000,
+    "min_distance": 50.0,
+    "ratio": 0.75,
+    "ransac_threshold": 5.0,
+    "min_inliers": 8,
+    "dilation_size": 17
+  },
+  "affine_matrix": [
+    [
+      1.0059860222306898,
+      0.020943581517550134,
+      -161.54526539518204
+    ],
+    [
+      -0.020943581517550134,
+      1.0059860222306898,
+      100.17303851975606
+    ]
+  ],
+  "warning": "Educational baseline; output highlights suspected regions, not proof of forgery.",
+  "pixel_metrics_vs_provided_mask": {
+    "pixel_precision": 0.06569679415443355,
+    "pixel_recall": 1.0,
+    "pixel_f1": 0.12329359441596147,
+    "pixel_iou": 0.06569679415443355
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "image": "comofod_data\\001_O.png",
+  "is_suspected_forgery": true,
+  "reason": "Geometrically consistent distant feature matches",
+  "keypoint_count": 2000,
+  "candidate_match_count": 130,
+  "inlier_count": 28,
+  "parameters": {
+    "nfeatures": 2000,
+    "min_distance": 50.0,
+    "ratio": 0.75,
+    "ransac_threshold": 5.0,
+    "min_inliers": 8,
+    "dilation_size": 17
+  },
+  "affine_matrix": [
+    [
+      1.0028713577241233,
+      -0.03330329563111187,
+      -86.99986550416311
+    ],
+    [
+      0.03330329563111187,
+      1.0028713577241233,
+      -8.604084908526325
+    ]
+  ],
+  "warning": "Educational baseline; output highlights suspected regions, not proof of forgery."
+}

@@ -1,0 +1,32 @@
+{
+  "dataset_root": "C:\\Users\\RISHAV\\Downloads\\CMFD_results_and_report_outline\\comofod_data",
+  "selected_ids": [
+    "001",
+    "050",
+    "100",
+    "150",
+    "200"
+  ],
+  "images_evaluated": 10,
+  "forged_images_detected": 5,
+  "forged_images_missed": 0,
+  "original_images_false_alarm": 2,
+  "original_images_correctly_not_flagged": 3,
+  "image_level_accuracy": 0.8,
+  "image_level_precision": 0.7142857142857143,
+  "image_level_recall": 1.0,
+  "image_level_f1": 0.8333333333333334,
+  "aggregate_pixel_precision": 0.2095674427760975,
+  "aggregate_pixel_recall": 0.680675443950359,
+  "aggregate_pixel_f1": 0.32046852443538293,
+  "aggregate_pixel_iou": 0.1908082873693387,
+  "pixel_metrics_note": "Pixel metrics aggregate forged-image masks plus false-positive pixels on originals. Verify the meaning of CoMoFoD B masks visually before interpreting scores.",
+  "parameters": {
+    "nfeatures": 2000,
+    "min_distance": 50.0,
+    "ratio": 0.75,
+    "ransac_threshold": 5.0,
+    "min_inliers": 8,
+    "dilation_size": 17
+  }
+}
